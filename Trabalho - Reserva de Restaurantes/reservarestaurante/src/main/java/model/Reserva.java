@@ -3,7 +3,6 @@ package model;
 import java.time.LocalDateTime;
 
 public class Reserva {
-    private static int contadorIds = 1;
     private int id = 0;
     private int numeroMesa;
     private String nomeCliente;
@@ -11,11 +10,14 @@ public class Reserva {
     private LocalDateTime fim; 
 
     public Reserva(int numeroMesa, String nomeCliente, LocalDateTime inicio, LocalDateTime fim) {
-        this.id = contadorIds++;
         this.numeroMesa = numeroMesa;
         this.nomeCliente = nomeCliente;
         this.inicio = inicio;
         this.fim = fim;
+    }
+
+    public void setId(int id) {
+        this.id = id; 
     }
 
     public int getId() {
