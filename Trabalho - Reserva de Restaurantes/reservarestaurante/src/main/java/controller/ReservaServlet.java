@@ -8,21 +8,17 @@ import jakarta.servlet.http.*;
 import model.Reserva;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
-import service.ReservaService;
-import util.LocalDateTimeAdapter;
+import model.ReservaService;
 import database.ReservaDAO;
 
 @WebServlet("/api/reservas")
 public class ReservaServlet extends HttpServlet {
 
     private ReservaService reservaService;
-    private Gson gson = new GsonBuilder()
-        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-        .create();
-
+    private Gson gson = new GsonBuilder().create();
 
     @Override
     public void init() {
@@ -38,10 +34,9 @@ public class ReservaServlet extends HttpServlet {
 
         int numeroMesa = body.get("numeroMesa").getAsInt();
         String nomeCliente = body.get("nomeCliente").getAsString();
-        LocalDateTime inicio = LocalDateTime.parse(body.get("inicio").getAsString());
-        LocalDateTime fim = LocalDateTime.parse(body.get("fim").getAsString());
+        LocalDate data = LocalDate.parse(body.get("data").getAsString());
 
-        boolean sucesso = reservaService.reservarMesa(numeroMesa, nomeCliente, inicio, fim);
+        boolean sucesso = reservaService.realizarReserva(numeroMesa, nomeCliente, data);
         resp.setContentType("application/json; charset=UTF-8");
 
         JsonObject resposta = new JsonObject();
@@ -55,9 +50,7 @@ public class ReservaServlet extends HttpServlet {
     resp.setContentType("application/json");
     resp.setCharacterEncoding("UTF-8");
 
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create();
+    Gson gson = new GsonBuilder().create();
 
     List<Reserva> reservas = reservaService.listarReservas();
 

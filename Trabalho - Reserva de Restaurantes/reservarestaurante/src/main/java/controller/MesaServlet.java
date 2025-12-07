@@ -7,7 +7,7 @@ import model.Mesa;
 
 import java.io.IOException;
 import java.util.List;
-import service.MesaService;
+import model.MesaService;
 
 @WebServlet("/api/mesas")
 public class MesaServlet extends HttpServlet {

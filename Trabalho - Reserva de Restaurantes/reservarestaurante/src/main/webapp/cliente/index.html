@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Reserva de Mesas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- ADICIONAR Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div id="layout">
+
+            <!-- parte esquerda: mesas -->
+            <div id="lado-esquerdo">
+                <h1>Mesas Disponíveis</h1>
+
+                <!-- Aqui só coloquei o v-for, mantendo a DIV original -->
+                <div id="lista-mesas" class="grid">
+                    <div v-for="mesa in mesasDisponiveis" :key="mesa.numero" class="mesa-card">
+                        <p class="mesa-numero"><strong>Mesa {{ mesa.numero }}</strong></p>
+                        <p class="capacidade">Capacidade:</p>
+                        <p class="capacidade-valor">{{ mesa.capacidade }} lugares</p>
+                        <p class="status livre">Disponível</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- parte direita: formulário de reserva -->
+            <div id="lado-direito">
+                <h2>Fazer Reserva</h2>
+
+                <div id="form-reserva">
+
+                    <label>Mesa disponível:</label>
+                    <select id="inputMesa" v-model="reserva.numeroMesa">
+                        <option disabled value="">Selecione</option>
+                        <option v-for="mesa in mesasDisponiveis" :value="mesa.numero">
+                            Mesa {{ mesa.numero }} - {{ mesa.capacidade }} lugares
+                        </option>
+                    </select>
+
+                    <label>Nome:</label>
+                    <input type="text" id="inputNome" v-model="reserva.nomeCliente">
+
+                    <label>Data:</label>
+                    <input type="date" id="inputData" v-model="reserva.data">
+
+                    <!-- Só troquei onclick por @click -->
+                    <button @click="enviarReserva">Reservar</button>
+                </div>
+
+                 <!-- Mensagem de erro -->
+                    <p v-if="erro" style="color: rgb(248, 60, 60); font-weight: bold;" class="mensagem">
+                        {{ erro }}
+                    </p>
+
+                    <!-- Mensagem de sucesso -->
+                    <p v-if="sucesso" style="color: rgb(74, 177, 74); font-weight: bold;" class="mensagem">
+                        {{ sucesso }}
+                    </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEU JS -->
+    <script src="js/clienteAjax.js"></script>
+
+</body>
+</html>

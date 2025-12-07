@@ -1,19 +1,18 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Reserva {
     private int id = 0;
     private int numeroMesa;
     private String nomeCliente;
-    private LocalDateTime inicio;
-    private LocalDateTime fim; 
+    private LocalDate data;
 
-    public Reserva(int numeroMesa, String nomeCliente, LocalDateTime inicio, LocalDateTime fim) {
+
+    public Reserva(int numeroMesa, String nomeCliente, LocalDate data) {
         this.numeroMesa = numeroMesa;
         this.nomeCliente = nomeCliente;
-        this.inicio = inicio;
-        this.fim = fim;
+        this.data = data;
     }
 
     public void setId(int id) {
@@ -32,11 +31,7 @@ public class Reserva {
         return nomeCliente;
     }
 
-    public LocalDateTime getInicio() {
-        return inicio;
-    }
-
-    public LocalDateTime getFim() {
-        return fim;
+    public LocalDate getData() {
+        return data;
     }
 }

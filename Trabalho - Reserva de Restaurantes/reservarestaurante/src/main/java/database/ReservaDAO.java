@@ -24,8 +24,7 @@ public class ReservaDAO {
                     Reserva r = new Reserva(
                         rs.getInt("numeromesa"),
                         rs.getString("nomecliente"),
-                        rs.getTimestamp("inicio").toLocalDateTime(),
-                        rs.getTimestamp("fim").toLocalDateTime()
+                        rs.getDate("data").toLocalDate()
                     );
                         r.setId(rs.getInt("id"));
 
@@ -42,7 +41,7 @@ public class ReservaDAO {
 
     public void inserir(Reserva r) {
 
-        String sql = "INSERT INTO Reserva(numeromesa, nomecliente, inicio, fim) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Reserva(numeromesa, nomecliente, data) VALUES (?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -50,8 +49,7 @@ public class ReservaDAO {
                 //ao inserir, o BD vai gerar o id 
                 ps.setInt(1, r.getNumeroMesa());
                 ps.setString(2, r.getNomeCliente());
-                ps.setTimestamp(3, Timestamp.valueOf(r.getInicio()));
-                ps.setTimestamp(4, Timestamp.valueOf(r.getFim()));
+                ps.setDate(3, Date.valueOf(r.getData()));
 
                 //execute update pra ações que modificam o BD 
                 ps.executeUpdate();
@@ -59,9 +57,6 @@ public class ReservaDAO {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-            MesaDAO mesaDao = new MesaDAO();
-            mesaDao.setIndisponivel(r.getNumeroMesa());
     }
 
     public Reserva buscarPorId(int id) {
@@ -79,8 +74,7 @@ public class ReservaDAO {
                     r = new Reserva(
                         rs.getInt("numeromesa"),
                         rs.getString("nomecliente"),
-                        rs.getTimestamp("inicio").toLocalDateTime(),
-                        rs.getTimestamp("fim").toLocalDateTime()
+                        rs.getDate("data").toLocalDate()
                     );
                     r.setId(rs.getInt("id"));
                 }
@@ -94,13 +88,21 @@ public class ReservaDAO {
 
     public boolean remover(int id) {
 
-        //eu acho que vai buscar a reserva aqui pra achar o num da mesa 
-        //e ai chamar mesa pra liberar 
-        MesaDAO mesaDao = new MesaDAO();
-        Reserva r = buscarPorId(id);
+        String sql = "UPDATE Reserva SET status = 'CANCELADA' WHERE id = ?";
+        boolean removido = false;
 
-        if (r == null) return false; 
-        return mesaDao.setDisponivel(r.getNumeroMesa());
+        try (Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setInt(1, id);
+                int linhasAfetadas = ps.executeUpdate();
+                removido = linhasAfetadas > 0;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        return removido;
     }
 
 }

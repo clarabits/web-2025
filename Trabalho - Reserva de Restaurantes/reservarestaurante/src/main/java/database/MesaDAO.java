@@ -12,7 +12,7 @@ public class MesaDAO {
         List<Mesa> mesas = new ArrayList<>();
 
         //pegar no BD
-        String sql = "SELECT * FROM Mesa";
+        String sql = "SELECT * FROM Mesa ORDER BY numero";
 
         try (Connection conn = ConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -38,7 +38,7 @@ public class MesaDAO {
         List<Mesa> mesas = new ArrayList<>();
 
         //pegar no BD
-        String sql = "SELECT * FROM Mesa WHERE disponivel = TRUE";
+        String sql = "SELECT * FROM Mesa WHERE disponivel = TRUE ORDER BY numero";
 
         try (Connection conn = ConnectionFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
